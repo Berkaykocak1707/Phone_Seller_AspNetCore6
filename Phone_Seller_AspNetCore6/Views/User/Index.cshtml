@@ -1,0 +1,66 @@
+﻿@model OrderListViewModel
+@{
+    Layout = "_LayoutForUser";
+}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">@User.Identity?.Name's Orders</h1>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="py-5">
+
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @if (Model.Orders?.Count() > 0)
+            {
+                @foreach (var item in Model.Orders)
+                {
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">@item.Lines.Count() Phone</div>
+                            @{
+                                var random = new Random();
+                                var randomLine = item.Lines.ElementAt(random.Next(item.Lines.Count()));
+                                var phonePhotoUrl = randomLine.Phone.PhonePhotoUrl;
+                            }
+                            <img class="card-img-top" src="@phonePhotoUrl" alt="Phone Image" style="width: 100%; height: 15vw; object-fit: cover;" />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Order Number: #@item.OrderId</h5>
+                                    <!-- Product price-->
+                                    @{
+                                        @item.Lines.Sum(c => c.Phone.PhonePrice * c.Quantity).ToString("c2")
+                                        ;
+                                    }
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-action="OrderDetail" asp-route-slug="@item.OrderId">Show Order</a></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="bi bi-cart-x" style="font-size: 2rem; color: grey;"></i>
+                    <span class="ms-3" style="font-size: 1.5rem;">You haven't placed any orders yet.</span>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="text-center">
+        <div page-model="@Model.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+             page-class-normal="btn-outline-dark" page-class-selected="btn-secondary" class="btn-group">
+        </div>
+    </div>
+</section>

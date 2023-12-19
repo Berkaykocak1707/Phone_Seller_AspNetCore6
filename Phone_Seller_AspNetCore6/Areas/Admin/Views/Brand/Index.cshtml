@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BrandDto>
+
+@{
+    ViewBag.Title = "Brand List";
+}
+
+<h2>Brand List</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brand in Model)
+        {
+            <tr>
+                <td>@brand.BrandID</td>
+                <td>@brand.BrandName</td>
+                <td>@brand.BrandCode</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@brand.BrandID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@brand.BrandID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

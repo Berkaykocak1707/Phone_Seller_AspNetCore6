@@ -1,0 +1,56 @@
+﻿@model PhoneListViewModel
+
+@{
+    ViewData["Title"] = "Phones List";
+}
+
+<h2>Phones List</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Rating</th>
+            <th>Photo</th>
+            <th>Brand</th>
+            <th>Code</th>
+            <th>Stock</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var phone in Model.Phones)
+        {
+            <tr>
+                <td>@phone.PhoneID</td>
+                <td>@phone.PhoneName</td>
+                <td>
+                    @if(@phone.PhoneStar is not 0)
+                    {
+                        <p>@phone.PhoneStar</p>
+                    }
+                    else
+                    {
+                        <p>N/A</p>
+                    }
+                </td>
+                <td><img src="@phone.PhonePhotoUrl" style="max-width: 50px;" alt="Current Phone Image" /></td>
+                <td>@phone.Brand?.BrandName</td>
+                <td>@phone.PhoneCode</td>
+                <td>@phone.PhoneStock</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@phone.PhoneID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@phone.PhoneID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="text-center">
+    <div page-model="@Model?.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+         page-class-normal="btn-outline-dark" page-class-selected="btn-secondary" class="btn-group">
+    </div>
+</div>

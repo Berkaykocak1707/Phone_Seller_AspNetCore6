@@ -1,0 +1,82 @@
+﻿@model PhoneAndBrandListViewModel
+@{
+    ViewData["Title"] = $"{Model.Phone.PhoneName}";
+}
+
+<!-- Product section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.Phone.PhonePhotoUrl" alt="..." /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">SKU: @Model.Phone.PhoneCode</div>
+                <h1 class="display-5 fw-bolder">@Model.Phone.PhoneName</h1>
+                <div class="fs-5 mb-5">
+                    @if (Model.Phone.PhoneOldPrice != 0)
+                        { 
+                            <span class="text-decoration-line-through">$@Model.Phone.PhoneOldPrice</span>
+                        }
+                    <span>$@Model.Phone.PhonePrice</span>
+                </div>
+                <p class="lead">@Model.Phone.PhoneDetail</p>
+                <div class="d-flex">
+                    <form id="@Model.Phone.BrandID" asp-page="/cart" method="post">
+                        <input type="hidden" name="phoneID" value="@Model.Phone.PhoneID" />
+                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Add to cart
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related items section-->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var phones in Model.Phones)
+                {
+            <div class="col mb-5">
+                
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="@phones.PhonePhotoUrl" alt="..." style=" width: 100%; height: 15vw;object-fit: cover;" />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">@phones.PhoneName</h5>
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    @for (int i = 0; i < phones.PhoneStar; i++)
+                                    {
+                                        <div class="bi-star-fill"></div>
+                                    }
+                                    @if (phones.PhoneRatingCountUser > 0)
+                                    {
+                                        <span>(@phones.PhoneRatingCountUser)</span>
+                                    }
+
+
+                                </div>
+                                @if (phones.PhoneOldPrice != 0)
+                                {
+                                    <span class="text-muted text-decoration-line-through">$@phones.PhoneOldPrice</span>
+                                }
+                                $@phones.PhonePrice
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-action="Phone" asp-route-slug="@phones.PhoneSlug">Show Phone</a></div>
+                        </div>
+                    </div>
+                
+                
+            </div>
+            }
+        </div>
+    </div>
+</section>

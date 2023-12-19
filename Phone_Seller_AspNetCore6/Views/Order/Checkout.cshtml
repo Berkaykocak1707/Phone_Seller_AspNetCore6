@@ -1,0 +1,65 @@
+﻿@model OrderDtoForCreation
+@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Checkout</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="~/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Personal information for Order </h2>
+
+    <form asp-action="Checkout" method="post" class="w-100 rounded-1 p-4 border bg-white">
+        <input type="hidden" asp-for="UserId" value="@ViewData["UserId"]" />
+        <label class="d-block mb-4">
+            <span class="form-label d-block">Name</span>
+            <input asp-for="Name" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Name)</span>
+        </label>
+
+        <label class="d-block mb-4">
+            <span class="form-label d-block">Address Line 1</span>
+            <input asp-for="Line1" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Line1)</span>
+        </label>
+
+        <label class="d-block mb-4">
+            <span class="form-label d-block">Address Line 2</span>
+            <input asp-for="Line2" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Line2)</span>
+        </label>
+        <label class="d-block mb-4">
+            <span class="form-label d-block">Address Line 3</span>
+            <input asp-for="Line3" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Line3)</span>
+        </label>
+        <label class="d-block mb-4">
+            <span class="form-label d-block">City</span>
+            <input asp-for="City" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.City)</span>
+        </label>
+
+        <label class="d-block mb-4 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="GiftWrap" />
+            <span class="form-check-label" asp-for="GiftWrap">Gift Wrap</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary px-3 rounded-3">Submit</button>
+    </form>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/scripts.js"></script>
+</body>
+</html>

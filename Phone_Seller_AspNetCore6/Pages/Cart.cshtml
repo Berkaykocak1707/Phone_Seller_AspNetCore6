@@ -1,0 +1,155 @@
+@page "/cart"
+@model CartModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>shopping cart - Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <style type="text/css">
+        .img-cart {
+            display: block;
+            max-width: 50px;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table tr td {
+            border: 1px solid #ffffff;
+        }
+
+        table tr th {
+            background: #eee;
+        }
+
+        .panel-shadow {
+            box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+        }
+    </style>
+</head>
+<body>
+    <link rel="stylesheet"
+          type="text/css"
+          href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+    <div class="container bootstrap snippets bootdey">
+        <div class="col-md-9 col-sm-8 content">
+            <div class="row">
+                <div class="col-md-12">
+                    <ol class="breadcrumb">
+                        <li><a href="/">Home</a></li>
+                        <li class="active">Cart</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-info panel-shadow">
+                        <div class="panel-heading">
+                            <h3>
+                                <img class="img-circle img-thumbnail"
+                                     src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" width="200px" />
+                                     @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <span>@User.Identity.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Guest</span>
+                                    }
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Description</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var line in Model.Cart?.Lines ?? Enumerable.Empty<CartLine>())
+                                        {
+                                            
+                                        
+                                        <tr>
+                                            <td>
+                                                <img src="@line.Phone.PhonePhotoUrl" class="img-cart" />
+                                            </td>
+                                            <td>
+                                                    @if (line.Phone.PhoneName != null)
+                                                    {
+                                                        if (line.Phone.PhoneName.Length > 25)
+                                                        {
+                                                            <strong><a style="color:black" asp-action="Phone" asp-route-slug="@line.Phone.PhoneSlug">@line.Phone.PhoneName.Substring(0,25)...</a></strong>
+                                                        }
+                                                        else
+                                                        {
+                                                            <strong>@line.Phone.PhoneName</strong>
+                                                        }
+                                                    }
+                                            </td>
+                                            <td>
+                                                    <div style="display: flex;justify-content: flex-start;flex-direction: row;">
+                                                        <div>
+                                                            <form class="form-inline" asp-page-handler="Update">
+                                                                <input type="hidden" name="productId" value="@line.Phone.PhoneID" />
+                                                                <input class="form-control" type="text" name="quantity" value="@line.Quantity" />
+                                                                <button rel="tooltip" class="btn btn-default">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </button>
+                                                                <br>
+                                                                <strong style="color:#ff0000">@ViewData["ErrorMessage"]</strong>
+                                                            </form>
+                                                        </div>
+                                                        <div>
+                                                            <form asp-page-handler="Remove">
+                                                                <input type="hidden" name="productId" value="@line.Phone.PhoneID" />
+                                                                <button rel="tooltip" class="btn btn-default" style="margin-left: 3px;">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+
+                                            </td>
+                                            <td>@line.Phone.PhonePrice.ToString("c2")</td>
+                                            <td>@((line.Phone.PhonePrice * line.Quantity).ToString("c2"))</td>
+                                        </tr>
+                                        }
+                                        <tr>
+                                            <td colspan="6">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-right">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td>@Model.Cart?.ComputeTotalValue().ToString("C2")</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/" class="btn btn-success">
+                        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Continue Shopping
+                    </a>
+                    <a asp-action="Checkout" asp-controller="Order" class="btn btn-primary pull-right">
+                        Next<span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    @*<script type="text/javascript"></script>*@
+</body>
+</html>

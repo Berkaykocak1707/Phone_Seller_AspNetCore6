@@ -1,0 +1,73 @@
+@model OrderListViewModel
+<div class="text-center my-5">
+    <div class="display-6 border-bottom">Orders</div>
+</div>
+
+@if(Model?.Orders?.Count() >0)
+{
+    @foreach (var order in Model.Orders)
+    {
+        <div class="my-3">
+
+            <div class="row shadow my-3">
+                <div class="col-md-3 border-1 border-dark p-3 bg-light shadow">
+                    <h5 class="display-5 text-center">
+                        <i class="fa fa-address-book text-danger"></i>
+                        <br />
+                    </h5>
+                    <p>@order?.Line1</p>
+                    <p>@order?.Line2</p>
+                    <p>@order?.Line3</p>
+                    <p>@order?.City</p>
+                    <p class="rounded-2 p-3">
+                        <span class="bg-info p-2">@(order.Shipped ? "Completed" : "In Progress")</span>
+                    </p>
+                </div>
+                <div class="col-md-9">
+                    <h6 class="display-6 mt-3 text-center">
+                        Cart
+                    </h6>
+                    <ul class="list-group">
+                        @foreach (var cartItem in order?.Lines)
+                        {
+                            <li class="list-group-item d-flex justify-content-between brand">
+                                @cartItem.Phone.PhoneName
+                                <b>
+                                    @cartItem.Quantity x @cartItem.Phone.PhonePrice.ToString("C2")
+                                    = @((cartItem.Quantity * cartItem.Phone.PhonePrice).ToString("C2"))
+                                </b>
+                            </li>
+                        }
+                        <li class="list-group-item d-flex justify-content-between text-danger">
+                            Total
+                            <b>
+                                @{
+                                    @order.Lines.Sum(c => c.Phone.PhonePrice * c.Quantity).ToString("c2");
+                                }
+                            </b>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-2 p-2">
+                        <form method="post" asp-action="Complete">
+                            <input type="hidden" name="id" value="@order.OrderId" />
+                            <button type="submit" class="btn btn-primary" disabled="@order?.Shipped">
+                                Complete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info my-5">
+        <p class="lead">There is no order yet.</p>
+    </div>
+}
+<div class="text-center">
+    <div page-model="@Model?.Pagination" page-action="Index" page-classes-enabled="true" page-class="btn"
+         page-class-normal="btn-outline-dark" page-class-selected="btn-secondary" class="btn-group">
+    </div>
+</div>

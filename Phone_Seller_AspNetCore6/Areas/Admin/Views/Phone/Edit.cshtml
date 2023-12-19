@@ -1,0 +1,102 @@
+﻿@model PhoneDtoForUpdate
+
+@{
+    ViewData["Title"] = "Edit Phone";
+}
+
+<h2>Edit Phone</h2>
+
+<div class="container mt-5">
+    <h2>Edit Phone</h2>
+    <hr />
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+        <input type="hidden" asp-for="PhoneID" />
+        <input type="hidden" asp-for="PhoneSlug" />
+        <input type="hidden" asp-for="PhonePhotoUrl" />
+        <input type="hidden" name="PhoneCodeInModel" value="@Model.PhoneCode" />
+        <div class="form-group my-3">
+            <label asp-for="PhoneName">Phone Name</label>
+            <input asp-for="PhoneName" class="form-control" />
+            <span asp-validation-for="PhoneName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneCode">Phone Code</label>
+            <input asp-for="PhoneCode" class="form-control" maxlength="3" />
+            <span asp-validation-for="PhoneCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="BrandID">Brand</label>
+            <select asp-for="BrandID" class="form-control" asp-items="@ViewBag.Brands">
+                <option value="">-- Select Brand --</option>
+            </select>
+            <span asp-validation-for="BrandID" class="text-danger"></span>
+        </div>
+
+        <!-- Existing photo display (if available) -->
+        @if (Model.PhonePhotoUrl != null)
+        {
+            <div class="form-group my-3">
+                <img src="@Model.PhonePhotoUrl" style="max-width: 200px;" alt="Current Phone Image" />
+            </div>
+        }
+
+        <div class="form-group my-3">
+            <label asp-for="PhonePhotoUrl">Change Phone Photo</label>
+            <input name="file" type="file" class="form-control-file" />
+            <span asp-validation-for="PhonePhotoUrl" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneDetail">Phone Detail</label>
+            <textarea asp-for="PhoneDetail" class="form-control"></textarea>
+            <span asp-validation-for="PhoneDetail" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneStock">Phone Stock</label>
+            <input asp-for="PhoneStock" class="form-control" />
+            <span asp-validation-for="PhoneStock" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhonePrice">Phone Price</label>
+            <input asp-for="PhonePrice" class="form-control" />
+            <span asp-validation-for="PhonePrice" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneOldPrice">Phone Old Price</label>
+            <input asp-for="PhoneOldPrice" class="form-control" />
+            <span asp-validation-for="PhoneOldPrice" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneOnSale">Phone On Sale</label>
+            <div class="form-check">
+                <input asp-for="PhoneOnSale" class="form-check-input" />
+                <label class="form-check-label" for="PhoneOnSale">Yes</label>
+            </div>
+            <span asp-validation-for="PhoneOnSale" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <label asp-for="PhoneIsActive">Phone Is Active</label>
+            <div class="form-check">
+                <input asp-for="PhoneIsActive" class="form-check-input" />
+                <label class="form-check-label" for="PhoneIsActive">Yes</label>
+            </div>
+            <span asp-validation-for="PhoneIsActive" class="text-danger"></span>
+        </div>
+
+        <div class="form-group my-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+</div>
+
+<a asp-action="Index">Back to List</a>

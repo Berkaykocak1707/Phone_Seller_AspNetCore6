@@ -1,0 +1,156 @@
+﻿@model OrderDto
+@{
+    Layout = "_LayoutForUser";
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+@section Style
+    {
+    <style>
+        .custom-star {
+            color: gray;
+            transition: color 0.3s; /* Geçiş süresi ekleyerek animasyon efekti ekleyebilirsiniz */
+        }
+
+            .custom-star:hover {
+                color: #ffdf00; /* Üzerine gelindiğinde renk değiştirecek stil */
+            }
+    </style>
+    }
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rating</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @successMessage
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Order Detail</h1>
+        </div>
+    </div>
+</header>
+<section class="py-5">
+    <div class="text-xl-center">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Sol Bölüm -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Adress</h5>
+                        <p class="card-text">@Model?.City</p>
+                        <p class="card-text">@Model?.Line1</p>
+                        <p class="card-text">@Model?.Line2</p>
+                        <p class="card-text">@Model?.Line3</p>
+                        <p>
+                            <strong>@(Model.GiftWrap ? "Gift Wrap" : "Just Phone")</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Sağ Bölüm -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Price and Cargo</h5>
+                        @foreach (var cartItem in Model.Lines)
+                        {
+                            <li class="list-group-item d-flex justify-content-between brand">
+                                @cartItem.Phone.PhoneName
+                                <b>
+                                    @cartItem.Quantity x @cartItem.Phone.PhonePrice.ToString("C2")
+                                    = @((cartItem.Quantity * cartItem.Phone.PhonePrice).ToString("C2"))
+                                </b>
+                            </li>
+                        }
+                        <p class="card-text">
+                            <strong>Total:</strong> @{
+                                @Model.Lines.Sum(c => c.Phone.PhonePrice * c.Quantity).ToString("c2")
+                                ;
+                            }
+                        </p>
+                        <p class="rounded-2 p-3">
+                            <span class="bg-info p-2">@(Model.Shipped ? "Completed" : "In Progress")</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="text-xl-center">
+            <p class="h2">Phones</p>
+        </div>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var phone in Model.Lines)
+            {
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img src="@phone.Phone.PhonePhotoUrl" alt="@phone.Phone.PhoneName" style=" width: 100%; height: 15vw;object-fit: cover;" />
+
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">@phone.Phone.PhoneName</h5>
+                                <span>Give a star!</span>
+                                <!-- Product reviews-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <form method="post" asp-action="Rating">
+                                        <input type="hidden" name="orderId" value="@Model.OrderId">
+                                        <input type="hidden" name="productId" value="@phone.Phone.PhoneID">
+                                        <button class="btn bi-star-fill custom-star" style="margin-right: -3px;" type="submit" name="rating" value="1"></button>
+                                        <button class="btn bi-star-fill custom-star" style="margin-right: -3px;" type="submit" name="rating" value="2"></button>
+                                        <button class="btn bi-star-fill custom-star" style="margin-right: -3px;" type="submit" name="rating" value="3"></button>
+                                        <button class="btn bi-star-fill custom-star" style="margin-right: -3px;" type="submit" name="rating" value="4"></button>
+                                        <button class="btn bi-star-fill custom-star" style="margin-right: -3px;" type="submit" name="rating" value="5"></button>
+                                    </form>
+                                </div>
+                                <!-- Product price-->
+                                @if (phone.Phone.PhoneOldPrice != 0)
+                                {
+                                    <span class="text-muted text-decoration-line-through">$@phone.Phone.PhoneOldPrice</span>
+                                }
+                                $@phone.Phone.PhonePrice
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-controller="Home" asp-action="Phone" asp-route-slug="@phone.Phone.PhoneSlug">Show Phone</a></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    @section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#exampleModal').modal('show');
+
+            // Modal'ı 3 saniye sonra kapat
+            setTimeout(function () {
+                $('#exampleModal').modal('hide');
+            }, 10000);
+        });
+    </script>
+}
+}
