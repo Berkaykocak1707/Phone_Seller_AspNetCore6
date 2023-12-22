@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Repositories.Config
+namespace DataAccess.Config
 {
     public class IdentityRoleConfig : IEntityTypeConfiguration<IdentityRole>
     {
