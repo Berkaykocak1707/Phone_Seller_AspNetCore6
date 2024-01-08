@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
-namespace StoreApp.Areas.Admin.Controllers
+namespace Phone_Seller_AspNetCore6.Areas.Admin.Controllers
 {
     [Authorize]
     [Authorize(Policy = "AdminOnly")]

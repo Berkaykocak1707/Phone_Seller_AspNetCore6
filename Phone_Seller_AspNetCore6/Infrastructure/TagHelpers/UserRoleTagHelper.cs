@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace StoreApp.Infrastructure.TagHelpers
+namespace Phone_Seller_AspNetCore6.Infrastructure.TagHelpers
 {
     [HtmlTargetElement("td", Attributes ="user-role")]
     public class UserRoleTagHelper : TagHelper
